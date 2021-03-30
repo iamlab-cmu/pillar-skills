@@ -1,7 +1,7 @@
 from distutils.core import setup
   
 
-setup(name='plan_abstractions',
+setup(name='pillar_skills',
       version='0.1.0',
       install_requires=[
             'pillar_state',
