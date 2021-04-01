@@ -8,12 +8,13 @@ from .base_policy import BasePolicy
 class BaseSkill(ABC):
 
     @abstractstaticmethod
-    def are_preconditions_satisfied(pillar_state: State) -> float:
+    def are_preconditions_satisfied(pillar_state: State, parameter) -> float:
         """Computes the probability of the given ``pillar_state``
         satisfying the preconditions for this skill.
 
         Args:
             pillar_state: state to be checked.
+            parameter: skill parameter with which a policy is made
 
         Returns:
             A value in [0, 1]
@@ -21,12 +22,13 @@ class BaseSkill(ABC):
         pass
     
     @abstractstaticmethod
-    def are_termination_conditions_satisfied(pillar_state: State) -> float:
+    def are_termination_conditions_satisfied(pillar_state: State, parameter) -> float:
         """Computes the probability of the given ``pillar_state`` 
         satisfying the termination conditions for this skill.
 
         Args:
             pillar_state: state to be checked.
+            parameter: skill parameter with which a policy is made
 
         Returns:
             A value in [0, 1]
