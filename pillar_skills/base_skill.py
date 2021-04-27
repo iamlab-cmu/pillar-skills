@@ -41,8 +41,8 @@ class BaseSkill(ABC):
 
         Args:
             pillar_state: state to be checked.
-            parameter: skill parameter with which a policy is made
-            policy: the policy synthesized with initial state pillar_state and parameter
+            parameter: skill parameter with which the policy is made
+            policy: the policy being executed
             t_step: the discrete time steps elapsed during policy execution
 
         Returns:
