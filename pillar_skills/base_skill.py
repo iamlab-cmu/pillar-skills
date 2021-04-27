@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod, abstractstaticmethod
+from abc import ABC, abstractmethod
 from typing import Generator
 from pillar_state import State
 
@@ -7,8 +7,21 @@ from .base_policy import BasePolicy
 
 class BaseSkill(ABC):
 
-    @abstractstaticmethod
-    def are_preconditions_satisfied(pillar_state: State, parameter) -> float:
+    @abstractmethod
+    def can_preconditions_be_satisfied_for_state(self, pillar_state: State) -> bool:
+        """Computes whether or not there exists parameters with the given 
+        pillar_state such that `are_preconditions_satisfied` returns a non-zero value.
+
+        Args:
+            pillar_state: state to be checked.
+
+        Returns:
+            True or False
+        """
+        pass
+
+    @abstractmethod
+    def are_preconditions_satisfied(self, pillar_state: State, parameter) -> float:
         """Computes the probability of the given ``pillar_state``
         satisfying the preconditions for this skill.
 
@@ -21,22 +34,24 @@ class BaseSkill(ABC):
         """
         pass
     
-    @abstractstaticmethod
-    def are_termination_conditions_satisfied(pillar_state: State, parameter) -> float:
+    @abstractmethod
+    def are_termination_conditions_satisfied(self, pillar_state: State, parameter, policy: BasePolicy, t_step: int) -> float:
         """Computes the probability of the given ``pillar_state`` 
         satisfying the termination conditions for this skill.
 
         Args:
             pillar_state: state to be checked.
-            parameter: skill parameter with which a policy is made
+            parameter: skill parameter with which the policy is made
+            policy: the policy being executed
+            t_step: the discrete time steps elapsed during policy execution
 
         Returns:
             A value in [0, 1]
         """
         pass
 
-    @abstractstaticmethod
-    def make_skill_parameter_generator(pillar_state: State, max_num_parameters: int) -> Generator:
+    @abstractmethod
+    def make_skill_parameter_generator(self, pillar_state: State, max_num_parameters: int) -> Generator:
         """Returns a generator that will generate a list of at most 
         ``max_num_parameters`` amount of skill parameters per ``next``.
 
