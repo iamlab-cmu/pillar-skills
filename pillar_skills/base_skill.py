@@ -8,20 +8,20 @@ from .base_policy import BasePolicy
 class BaseSkill(ABC):
 
     @abstractmethod
-    def is_precondition_satisfied_for_state(self, pillar_state: State) -> bool:
-        """Computes whether or not there exists parameters with the given 
-        pillar_state such that `is_precondition_satisfied` returns a non-zero value.
+    def precondition_satisfied_for_state(self, pillar_state: State) -> float:
+        """Computes the probability of whether or not there exists parameters with the given 
+        pillar_state such that `precondition_satisfied` returns a non-zero value.
 
         Args:
             pillar_state: state to be checked.
 
         Returns:
-            True or False
+            A value in [0, 1]
         """
         pass
 
     @abstractmethod
-    def is_precondition_satisfied(self, pillar_state: State, parameter) -> float:
+    def precondition_satisfied(self, pillar_state: State, parameter) -> float:
         """Computes the probability of the given ``pillar_state``
         satisfying the precondition for this skill.
 
@@ -35,7 +35,7 @@ class BaseSkill(ABC):
         pass
     
     @abstractmethod
-    def is_termination_condition_satisfied(self, pillar_state: State, parameter, policy: BasePolicy, t_step: int) -> float:
+    def termination_condition_satisfied(self, pillar_state: State, parameter, policy: BasePolicy, t_step: int) -> float:
         """Computes the probability of the given ``pillar_state`` 
         satisfying the termination condition for this skill.
 
@@ -51,7 +51,7 @@ class BaseSkill(ABC):
         pass
 
     @abstractmethod
-    def is_skill_execution_successful(self, pillar_state_init: State, pillar_state_end: State, parameter, policy: BasePolicy, t_step: int) -> float:
+    def skill_execution_successful(self, pillar_state_init: State, pillar_state_end: State, parameter, policy: BasePolicy, t_step: int) -> float:
         """Computes the probability of the skill execution being successful.
 
         Args:
