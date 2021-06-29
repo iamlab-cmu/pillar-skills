@@ -8,22 +8,22 @@ from .base_policy import BasePolicy
 class BaseSkill(ABC):
 
     @abstractmethod
-    def can_preconditions_be_satisfied_for_state(self, pillar_state: State) -> bool:
-        """Computes whether or not there exists parameters with the given 
-        pillar_state such that `are_preconditions_satisfied` returns a non-zero value.
+    def precondition_satisfied_for_state(self, pillar_state: State) -> float:
+        """Computes the probability of whether or not there exists parameters with the given 
+        pillar_state such that `precondition_satisfied` returns a non-zero value.
 
         Args:
             pillar_state: state to be checked.
 
         Returns:
-            True or False
+            A value in [0, 1]
         """
         pass
 
     @abstractmethod
-    def are_preconditions_satisfied(self, pillar_state: State, parameter) -> float:
+    def precondition_satisfied(self, pillar_state: State, parameter) -> float:
         """Computes the probability of the given ``pillar_state``
-        satisfying the preconditions for this skill.
+        satisfying the precondition for this skill.
 
         Args:
             pillar_state: state to be checked.
@@ -35,12 +35,28 @@ class BaseSkill(ABC):
         pass
     
     @abstractmethod
-    def are_termination_conditions_satisfied(self, pillar_state: State, parameter, policy: BasePolicy, t_step: int) -> float:
+    def termination_condition_satisfied(self, pillar_state: State, parameter, policy: BasePolicy, t_step: int) -> float:
         """Computes the probability of the given ``pillar_state`` 
-        satisfying the termination conditions for this skill.
+        satisfying the termination condition for this skill.
 
         Args:
             pillar_state: state to be checked.
+            parameter: skill parameter with which the policy is made
+            policy: the policy being executed
+            t_step: the discrete time steps elapsed during policy execution
+
+        Returns:
+            A value in [0, 1]
+        """
+        pass
+
+    @abstractmethod
+    def skill_execution_successful(self, pillar_state_init: State, pillar_state_end: State, parameter, policy: BasePolicy, t_step: int) -> float:
+        """Computes the probability of the skill execution being successful.
+
+        Args:
+            pillar_state_init: state from which skill execution started
+            pillar_state_end: state at which skill execution ended
             parameter: skill parameter with which the policy is made
             policy: the policy being executed
             t_step: the discrete time steps elapsed during policy execution
@@ -82,20 +98,6 @@ class BaseSkill(ABC):
 
         Returns:
             A State, a list of States, or a distribution of States
-        """
-        raise NotImplementedError()
-
-    def effects_batch(self, pillar_states: list, parameters: list):
-        """Returns a batch of effects (see ``effects`` docs).
-
-        Length of ``pillar_states`` should equal to that of ``parameters``.
-
-        Args:
-            pillar_states: list of states from which effects are computed
-            parameters: list of skill parameters with which a policy is made
-
-        Returns:
-            A list of N effects where N is the length of ``pillar_states`` and ``parameters``
         """
         raise NotImplementedError()
 
